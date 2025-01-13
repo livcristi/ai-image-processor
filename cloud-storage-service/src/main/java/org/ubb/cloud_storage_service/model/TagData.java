@@ -15,20 +15,20 @@ public class TagData
     private UUID tagId;
 
     @Column(nullable = false)
-    private String key;
+    private String tagKey;
 
     @Column(nullable = false)
-    private String value;
+    private String tagValue;
 
     public TagData()
     {
         // Empty
     }
 
-    public TagData(String key, String value)
+    public TagData(String tagKey, String tagValue)
     {
-        this.key = key;
-        this.value = value;
+        this.tagKey = tagKey;
+        this.tagValue = tagValue;
     }
 
     public UUID getTagId()
@@ -41,24 +41,24 @@ public class TagData
         this.tagId = tagId;
     }
 
-    public String getKey()
+    public String getTagKey()
     {
-        return key;
+        return tagKey;
     }
 
-    public void setKey(String key)
+    public void setTagKey(String key)
     {
-        this.key = key;
+        this.tagKey = key;
     }
 
-    public String getValue()
+    public String getTagValue()
     {
-        return value;
+        return tagValue;
     }
 
-    public void setValue(String value)
+    public void setTagValue(String value)
     {
-        this.value = value;
+        this.tagValue = value;
     }
 
     @Override
@@ -67,13 +67,13 @@ public class TagData
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TagData tagData = (TagData) o;
-        return Objects.equals(tagId, tagData.tagId) && Objects.equals(key, tagData.key) && Objects.equals(value, tagData.value);
+        return Objects.equals(tagId, tagData.tagId) && Objects.equals(tagKey, tagData.tagKey) && Objects.equals(tagValue, tagData.tagValue);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(tagId, key, value);
+        return Objects.hash(tagId, tagKey, tagValue);
     }
 
     @Override
@@ -81,8 +81,8 @@ public class TagData
     {
         return "TagData{" +
                 "tagId=" + tagId +
-                ", key='" + key + '\'' +
-                ", value='" + value + '\'' +
+                ", key='" + tagKey + '\'' +
+                ", value='" + tagValue + '\'' +
                 '}';
     }
 }

@@ -1,4 +1,6 @@
-package org.ubb.cloud_storage_service.model;
+package org.ubb.cloud_storage_service.dto;
+
+import org.ubb.cloud_storage_service.model.EntityStatus;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -22,72 +24,6 @@ public class AuditRecord
     public AuditRecord()
     {
         // Empty
-    }
-
-    private AuditRecord(Builder builder)
-    {
-        this.timestamp = builder.timestamp;
-        this.status = builder.status;
-        this.objectId = builder.objectId;
-        this.objectName = builder.objectName;
-        this.userId = builder.userId;
-        this.containerId = builder.containerId;
-    }
-
-    public static ObjectInfo.Builder builder()
-    {
-        return new ObjectInfo.Builder();
-    }
-
-    public static class Builder
-    {
-        private long timestamp;
-        private EntityStatus status;
-        private String objectId;
-        private String objectName;
-        private String userId;
-        private String containerId;
-
-        public Builder timestamp(long timestamp)
-        {
-            this.timestamp = timestamp;
-            return this;
-        }
-
-        public Builder status(EntityStatus status)
-        {
-            this.status = status;
-            return this;
-        }
-
-        public Builder objectId(String objectId)
-        {
-            this.objectId = objectId;
-            return this;
-        }
-
-        public Builder objectName(String objectName)
-        {
-            this.objectName = objectName;
-            return this;
-        }
-
-        public Builder userId(String userId)
-        {
-            this.userId = userId;
-            return this;
-        }
-
-        public Builder containerId(String containerId)
-        {
-            this.containerId = containerId;
-            return this;
-        }
-
-        public AuditRecord build()
-        {
-            return new AuditRecord(this);
-        }
     }
 
     public UUID getRecordId()

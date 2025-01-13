@@ -22,3 +22,9 @@ spring:
 
 server:
   port: 2660
+  error:
+    include-message: always
+
+blob-storage:
+  azure:
+    key: ${AZURE_STORAGE_CONNECTION_STRING}

@@ -2,10 +2,7 @@ package org.ubb.cloud_storage_service.model;
 
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "interaction")
@@ -19,9 +16,6 @@ public class Interaction extends AuditableEntity
     @Column(nullable = false)
     private String userId;
 
-    @Column
-    private String container;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EntityStatus status;
@@ -29,6 +23,9 @@ public class Interaction extends AuditableEntity
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OperationType operationType;
+
+    @OneToMany(mappedBy = "interaction", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ObjectInfo> objectInfoList;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -41,63 +38,6 @@ public class Interaction extends AuditableEntity
     public Interaction()
     {
         // Empty constructor
-    }
-
-    public Interaction(Builder builder)
-    {
-        this.userId = builder.userId;
-        this.container = builder.container;
-        this.status = builder.status;
-        this.operationType = builder.operationType;
-        this.tags = builder.tags;
-    }
-
-    public static Builder builder()
-    {
-        return new Builder();
-    }
-
-    public static class Builder
-    {
-        private String userId;
-        private String container;
-        private EntityStatus status;
-        private OperationType operationType;
-        private Set<TagData> tags = new HashSet<>();
-
-        public Builder userId(String userId)
-        {
-            this.userId = userId;
-            return this;
-        }
-
-        public Builder container(String container)
-        {
-            this.container = container;
-            return this;
-        }
-
-        public Builder status(EntityStatus status)
-        {
-            this.status = status;
-            return this;
-        }
-
-        public Builder operationType(OperationType operationType)
-        {
-            this.operationType = operationType;
-            return this;
-        }
-
-        public Builder tags(Set<TagData> tags)
-        {
-            this.tags = tags;
-            return this;
-        }
-
-        public Interaction build() {
-            return new Interaction(this);
-        }
     }
 
     public UUID getInteractionId()
@@ -120,16 +60,6 @@ public class Interaction extends AuditableEntity
         this.userId = userId;
     }
 
-    public String getContainer()
-    {
-        return container;
-    }
-
-    public void setContainer(String container)
-    {
-        this.container = container;
-    }
-
     public EntityStatus getStatus()
     {
         return status;
@@ -150,6 +80,16 @@ public class Interaction extends AuditableEntity
         this.operationType = operationType;
     }
 
+    public List<ObjectInfo> getObjectInfoList()
+    {
+        return objectInfoList;
+    }
+
+    public void setObjectInfoList(List<ObjectInfo> objectInfoList)
+    {
+        this.objectInfoList = objectInfoList;
+    }
+
     public Set<TagData> getTags()
     {
         return tags;
@@ -166,13 +106,13 @@ public class Interaction extends AuditableEntity
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Interaction that = (Interaction) o;
-        return Objects.equals(interactionId, that.interactionId) && Objects.equals(userId, that.userId) && Objects.equals(container, that.container) && status == that.status && operationType == that.operationType && Objects.equals(tags, that.tags);
+        return Objects.equals(interactionId, that.interactionId) && Objects.equals(userId, that.userId) && status == that.status && operationType == that.operationType && Objects.equals(objectInfoList, that.objectInfoList) && Objects.equals(tags, that.tags);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(interactionId, userId, container, status, operationType, tags);
+        return Objects.hash(interactionId, userId, status, operationType, objectInfoList, tags);
     }
 
     @Override
@@ -180,10 +120,10 @@ public class Interaction extends AuditableEntity
     {
         return "Interaction{" +
                 "interactionId=" + interactionId +
-                ", userId=" + userId +
-                ", container='" + container + '\'' +
+                ", userId='" + userId + '\'' +
                 ", status=" + status +
                 ", operationType=" + operationType +
+                ", objectInfoList=" + objectInfoList +
                 ", tags=" + tags +
                 "} " + super.toString();
     }

@@ -4,21 +4,23 @@ import jakarta.persistence.MappedSuperclass;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.Instant;
+
 @MappedSuperclass
 public abstract class AuditableEntity
 {
     @CreationTimestamp
-    private long createdTime;
+    private Instant createdTime;
 
     @UpdateTimestamp
-    private long updatedTime;
+    private Instant updatedTime;
 
-    public long getCreatedTime()
+    public Instant getCreatedTime()
     {
         return createdTime;
     }
 
-    public long getUpdatedTime()
+    public Instant getUpdatedTime()
     {
         return updatedTime;
     }

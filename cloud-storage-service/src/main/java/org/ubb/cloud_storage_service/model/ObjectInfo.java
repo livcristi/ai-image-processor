@@ -19,15 +19,16 @@ public class ObjectInfo extends AuditableEntity
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String container;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EntityStatus status;
 
     @Column(nullable = false)
     private String type; // img or text
+
+    @ManyToOne
+    @JoinColumn(name = "interaction_id", nullable = false)
+    private Interaction interaction;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -42,80 +43,9 @@ public class ObjectInfo extends AuditableEntity
         // Empty constructor
     }
 
-    private ObjectInfo(Builder builder)
-    {
-        this.userId = builder.userId;
-        this.name = builder.name;
-        this.container = builder.container;
-        this.status = builder.status;
-        this.type = builder.type;
-        this.tags = builder.tags;
-    }
-
-    public static Builder builder()
-    {
-        return new Builder();
-    }
-
-    public static class Builder
-    {
-        private String userId;
-        private String name;
-        private String container;
-        private EntityStatus status;
-        private String type;
-        private Set<TagData> tags = new HashSet<>();
-
-        public Builder userId(String userId)
-        {
-            this.userId = userId;
-            return this;
-        }
-
-        public Builder name(String name)
-        {
-            this.name = name;
-            return this;
-        }
-
-        public Builder container(String container)
-        {
-            this.container = container;
-            return this;
-        }
-
-        public Builder status(EntityStatus status)
-        {
-            this.status = status;
-            return this;
-        }
-
-        public Builder type(String type)
-        {
-            this.type = type;
-            return this;
-        }
-
-        public Builder tags(Set<TagData> tags)
-        {
-            this.tags = tags;
-            return this;
-        }
-
-        public ObjectInfo build()
-        {
-            return new ObjectInfo(this);
-        }
-    }
-
     public UUID getObjectId()
     {
         return objectId;
-    }
-
-    public void setObjectId(UUID objectId)
-    {
-        this.objectId = objectId;
     }
 
     public String getUserId()
@@ -138,16 +68,6 @@ public class ObjectInfo extends AuditableEntity
         this.name = name;
     }
 
-    public String getContainer()
-    {
-        return container;
-    }
-
-    public void setContainer(String container)
-    {
-        this.container = container;
-    }
-
     public EntityStatus getStatus()
     {
         return status;
@@ -168,6 +88,16 @@ public class ObjectInfo extends AuditableEntity
         this.type = type;
     }
 
+    public Interaction getInteraction()
+    {
+        return interaction;
+    }
+
+    public void setInteraction(Interaction interaction)
+    {
+        this.interaction = interaction;
+    }
+
     public Set<TagData> getTags()
     {
         return tags;
@@ -184,13 +114,13 @@ public class ObjectInfo extends AuditableEntity
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ObjectInfo that = (ObjectInfo) o;
-        return Objects.equals(objectId, that.objectId) && Objects.equals(userId, that.userId) && Objects.equals(name, that.name) && Objects.equals(container, that.container) && status == that.status && Objects.equals(type, that.type) && Objects.equals(tags, that.tags);
+        return Objects.equals(objectId, that.objectId) && Objects.equals(userId, that.userId) && Objects.equals(name, that.name) && status == that.status && Objects.equals(type, that.type) && Objects.equals(interaction, that.interaction) && Objects.equals(tags, that.tags);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(objectId, userId, name, container, status, type, tags);
+        return Objects.hash(objectId, userId, name, status, type, interaction, tags);
     }
 
     @Override
@@ -198,11 +128,11 @@ public class ObjectInfo extends AuditableEntity
     {
         return "ObjectInfo{" +
                 "objectId=" + objectId +
-                ", userId=" + userId +
+                ", userId='" + userId + '\'' +
                 ", name='" + name + '\'' +
-                ", container='" + container + '\'' +
                 ", status=" + status +
                 ", type='" + type + '\'' +
+                ", interaction=" + interaction +
                 ", tags=" + tags +
                 "} " + super.toString();
     }
