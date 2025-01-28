@@ -1,9 +1,9 @@
 package org.ubb.cloud_storage_service.dto;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.List;
 
 public class InteractionResponse
 {

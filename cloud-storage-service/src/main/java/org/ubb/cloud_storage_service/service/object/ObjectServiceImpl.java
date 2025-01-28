@@ -1,5 +1,7 @@
 package org.ubb.cloud_storage_service.service.object;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.ubb.cloud_storage_service.dto.ObjectInfoRequest;
 import org.ubb.cloud_storage_service.dto.ObjectInfoResponse;
@@ -22,6 +24,8 @@ import java.util.UUID;
 @Service
 public class ObjectServiceImpl implements ObjectService
 {
+    private static final Logger LOG = LoggerFactory.getLogger(ObjectServiceImpl.class);
+
     private final ObjectInfoRepository objectInfoRepository;
     private final InteractionRepository interactionRepository;
     private final ObjectStorageProvider objectStorageProvider;
@@ -38,10 +42,13 @@ public class ObjectServiceImpl implements ObjectService
     @Override
     public ObjectInfoResponse createObjectMetadata(ObjectInfoRequest request)
     {
+        LOG.info("Will createObjectMetadata, request: {}", request);
+
         // Validate interaction ID
         UUID interactionId = request.getInteractionId();
         if (interactionId == null)
         {
+            LOG.warn("Unable to createObjectMetadata, interaction id is null for request: {}", request);
             throw new BadRequestException("Interaction ID must not be null for object metadata creation.");
         }
 
@@ -55,16 +62,21 @@ public class ObjectServiceImpl implements ObjectService
 
         // Save and return response
         ObjectInfo savedObject = objectInfoRepository.save(objectInfo);
-        return Converter.toObjectInfoResponse(savedObject);
+        ObjectInfoResponse response = Converter.toObjectInfoResponse(savedObject);
+        LOG.info("Done creatingObjectMetadata, response: {}", response);
+        return response;
     }
 
     @Override
     public ObjectInfoResponse uploadObjectContent(String userId, UUID objectId, InputStream content)
     {
+        LOG.info("Will uploadObjectContent, userId: {}, objectId: {}", userId, objectId);
+
         ObjectInfo objectInfo = getObjectInfoOrThrow(userId, objectId);
 
         if (objectInfo.getStatus() == EntityStatus.COMPLETED)
         {
+            LOG.warn("Unable to uploadObjectContent, userId: {}, objectId: {} is already completed", userId, objectId);
             throw new BadRequestException("Content for the object has already been uploaded.");
         }
 
@@ -79,26 +91,35 @@ public class ObjectServiceImpl implements ObjectService
         // Update object status to COMPLETED
         objectInfo.setStatus(EntityStatus.COMPLETED);
         objectInfo = objectInfoRepository.save(objectInfo);
-        return Converter.toObjectInfoResponse(objectInfo);
+        ObjectInfoResponse response = Converter.toObjectInfoResponse(objectInfo);
+        LOG.info("Done uploadObjectContent, response: {}", response);
+        return response;
     }
 
     @Override
     public ObjectInfoResponse createAndUploadObject(ObjectInfoRequest request, InputStream content)
     {
+        LOG.info("Will createAndUploadObject, request: {}", request);
         ObjectInfoResponse metadataResponse = createObjectMetadata(request);
-        return uploadObjectContent(metadataResponse.getUserId(), metadataResponse.getObjectId(), content);
+        ObjectInfoResponse response = uploadObjectContent(metadataResponse.getUserId(), metadataResponse.getObjectId(), content);
+        LOG.info("Done createAndUploadObject, response: {}", response);
+        return response;
     }
 
     @Override
     public Optional<ObjectInfoResponse> getObjectMetadata(String userId, UUID objectId)
     {
-        return objectInfoRepository.findByUserIdAndObjectId(userId, objectId)
+        LOG.info("Will getObjectMetadata, userId: {}, objectId: {}", userId, objectId);
+        var response = objectInfoRepository.findByUserIdAndObjectId(userId, objectId)
                 .map(Converter::toObjectInfoResponse);
+        LOG.info("Done getObjectMetadata, userId: {}, objectId: {}, isPresent: {}", userId, objectId, response.isPresent());
+        return response;
     }
 
     @Override
     public InputStream getObjectContent(String userId, UUID objectId, boolean isSimple)
     {
+        LOG.info("Will getObjectContent, userId: {}, objectId: {}, isSimple: {}", userId, objectId, isSimple);
         ObjectInfo objectInfo = getObjectInfoOrThrow(userId, objectId);
 
         String objectName = objectInfo.getName();
@@ -109,15 +130,20 @@ public class ObjectServiceImpl implements ObjectService
             String simpleObjectName = objectName + "-simple";
             if (objectStorageProvider.objectExists(userId, interactionId, simpleObjectName))
             {
-                return objectStorageProvider.getObjectContent(userId, interactionId, simpleObjectName);
+                var response = objectStorageProvider.getObjectContent(userId, interactionId, simpleObjectName);
+                LOG.info("Done simple getObjectContent, userId: {}, objectId: {}", userId, objectId);
+                return response;
             }
         }
-        return objectStorageProvider.getObjectContent(userId, interactionId, objectName);
+        var response = objectStorageProvider.getObjectContent(userId, interactionId, objectName);
+        LOG.info("Done not-simple getObjectContent, userId: {}, objectId: {}", userId, objectId);
+        return response;
     }
 
     @Override
     public ObjectInfoResponse updateObjectMetadata(String userId, UUID objectId, ObjectInfoRequest request)
     {
+        LOG.info("Will updateObjectMetadata, userId: {}, objectId: {}, request: {}", userId, objectId, request);
         ObjectInfo objectInfo = getObjectInfoOrThrow(userId, objectId);
 
         // Update only tags
@@ -125,12 +151,15 @@ public class ObjectServiceImpl implements ObjectService
         objectInfo.setTags(updatedTags);
 
         ObjectInfo updatedObject = objectInfoRepository.save(objectInfo);
-        return Converter.toObjectInfoResponse(updatedObject);
+        ObjectInfoResponse response = Converter.toObjectInfoResponse(updatedObject);
+        LOG.info("Done updateObjectMetadata, userId: {}, objectId: {}, response: {}", userId, objectId, response);
+        return response;
     }
 
     @Override
     public void deleteObject(String userId, UUID objectId)
     {
+        LOG.info("Will deleteObject, userId: {}, objectId: {}", userId, objectId);
         ObjectInfo objectInfo = getObjectInfoOrThrow(userId, objectId);
         String objectName = objectInfo.getName();
         UUID interactionId = objectInfo.getInteraction().getInteractionId();
@@ -149,6 +178,7 @@ public class ObjectServiceImpl implements ObjectService
         {
             objectStorageProvider.deleteObject(userId, interactionId, simpleObjectName);
         }
+        LOG.info("Done deleteObject, userId: {}, objectId: {}", userId, objectId);
     }
 
     private ObjectInfo getObjectInfoOrThrow(String userId, UUID objectId)

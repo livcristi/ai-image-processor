@@ -129,6 +129,10 @@ public class Converter
     // Convert set of TagRequest to set of TagData
     public static Set<TagData> toTagDataSet(Set<TagRequest> tags)
     {
+        if (tags == null)
+        {
+            return Set.of();
+        }
         return tags.stream()
                 .map(Converter::toTagModel)
                 .collect(Collectors.toSet());

@@ -2,7 +2,10 @@ package org.ubb.cloud_storage_service.model;
 
 import jakarta.persistence.*;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "object_info")
