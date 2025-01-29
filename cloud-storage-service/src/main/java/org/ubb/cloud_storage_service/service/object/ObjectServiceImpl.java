@@ -3,6 +3,7 @@ package org.ubb.cloud_storage_service.service.object;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.ubb.cloud_storage_service.dto.ObjectInfoRequest;
 import org.ubb.cloud_storage_service.dto.ObjectInfoResponse;
 import org.ubb.cloud_storage_service.exception.BadRequestException;
@@ -22,6 +23,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class ObjectServiceImpl implements ObjectService
 {
     private static final Logger LOG = LoggerFactory.getLogger(ObjectServiceImpl.class);
