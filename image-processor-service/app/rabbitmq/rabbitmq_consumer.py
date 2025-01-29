@@ -20,7 +20,7 @@ def rabbitmq_consumer(
     channel = connection.channel()
 
     # Declare the queue
-    channel.queue_declare(queue=connection_data.rabbitmq_queue)
+    channel.queue_declare(queue=connection_data.rabbitmq_queue, durable=True)
 
     def callback(ch, method, properties, body):
         """Callback to process a RabbitMQ message."""
