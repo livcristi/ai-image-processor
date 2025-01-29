@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: image-handler-service
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  datasource:
+    url: jdbc:mysql://localhost:3306/cloudstoragedb
+    username: app_user
+    password: app_password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none # Prevent Hibernate from altering the schema, since Flyway handles migrations
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+server:
+  port: 2740
+  error:
+    include-message: always
+
+cloud-storage-service:
+  base-url: http://localhost:2660
+
+rabbitmq:
+  exchange:
+  routing-key: image-processor-task-queue
+  queue-name: image-processor-task-queue
