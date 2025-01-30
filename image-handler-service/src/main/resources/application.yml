@@ -3,15 +3,16 @@ spring:
     name: image-handler-service
 
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+    host: ${RABBITMQ_HOST:localhost}
+    virtual-host: ${RABBITMQ_VHOST:/}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:password}
 
   datasource:
-    url: jdbc:mysql://localhost:3306/authdb
-    username: app_user
-    password: app_password
+    url: ${AUTH_SQL_DATASOURCE:jdbc:mysql://localhost:3306/authdb}
+    username: ${AUTH_SQL_USERNAME:app_user}
+    password: ${AUTH_SQL_PASSWORD:app_password}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -37,7 +38,7 @@ server:
     include-message: always
 
 cloud-storage-service:
-  base-url: http://localhost:2660
+  base-url: ${CLOUD_STORAGE_SERVICE:http://localhost:2660}
 
 rabbitmq:
   exchange:
