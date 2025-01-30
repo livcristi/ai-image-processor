@@ -3,9 +3,9 @@ spring:
     name: cloud-storage-service
 
   datasource:
-    url: jdbc:mysql://localhost:3306/cloudstoragedb
-    username: app_user
-    password: app_password
+    url: ${CSS_SQL_DATASOURCE:dbc:mysql://localhost:3306/cloudstoragedb}
+    username: ${CSS_SQL_USERNAME:app_user}
+    password: ${CSS_SQL_PASSWORD:app_password}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
