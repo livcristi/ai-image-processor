@@ -12,11 +12,8 @@ def rabbitmq_consumer(
     connection_data: RabbitMqConnectionDetails, task_processor: TaskProcessor
 ):
     """RabbitMQ consumer that listens for tasks."""
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters(
-            host=connection_data.rabbitmq_host, port=connection_data.rabbitmq_port
-        )
-    )
+    parameters = pika.URLParameters(connection_data.rabbitmq_connection_string)
+    connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
 
     # Declare the queue
