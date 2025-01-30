@@ -15,7 +15,9 @@ import org.ubb.image_handler_service.dto.interaction.InteractionContent;
 import org.ubb.image_handler_service.dto.interaction.InteractionPreview;
 import org.ubb.image_handler_service.dto.interaction.InteractionResponse;
 import org.ubb.image_handler_service.dto.interaction.InteractionStatus;
+import org.ubb.image_handler_service.exception.UnauthorizedException;
 import org.ubb.image_handler_service.service.InteractionService;
+import org.ubb.image_handler_service.service.security.AuthenticationFacade;
 
 import java.util.UUID;
 
@@ -24,10 +26,12 @@ import java.util.UUID;
 public class InteractionController implements InteractionApi
 {
     private final InteractionService interactionService;
+    private final AuthenticationFacade authenticationFacade;
 
-    public InteractionController(InteractionService interactionService)
+    public InteractionController(InteractionService interactionService, AuthenticationFacade authenticationFacade)
     {
         this.interactionService = interactionService;
+        this.authenticationFacade = authenticationFacade;
     }
 
     @Override
@@ -36,6 +40,7 @@ public class InteractionController implements InteractionApi
                                                                 @RequestParam("operationType") OperationType operationType,
                                                                 @RequestParam("image") MultipartFile image)
     {
+        authCheck(userId);
         ObjectInfoResponse response = interactionService.createInteraction(userId, operationType, image);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -45,6 +50,7 @@ public class InteractionController implements InteractionApi
     public ResponseEntity<Page<InteractionResponse>> getUserInteractions(@RequestParam("userId") String userId,
                                                                          @PageableDefault(size = 5, sort = "createdTime", direction = Sort.Direction.DESC) Pageable pageable)
     {
+        authCheck(userId);
         Page<InteractionResponse> response = interactionService.getUserInteractions(userId, pageable);
         return ResponseEntity.ok(response);
     }
@@ -53,6 +59,7 @@ public class InteractionController implements InteractionApi
     @GetMapping("/{interactionId}/preview")
     public ResponseEntity<InteractionPreview> getInteractionPreview(@RequestParam("userId") String userId, @PathVariable("interactionId") UUID interactionId)
     {
+        authCheck(userId);
         InteractionPreview response = interactionService.getInteractionPreview(userId, interactionId);
         return ResponseEntity.ok(response);
     }
@@ -61,6 +68,7 @@ public class InteractionController implements InteractionApi
     @GetMapping("/{interactionId}/status")
     public ResponseEntity<InteractionStatus> getInteractionStatus(@RequestParam("userId") String userId, @PathVariable("interactionId") UUID interactionId)
     {
+        authCheck(userId);
         InteractionStatus response = interactionService.getInteractionStatus(userId, interactionId);
         return ResponseEntity.ok(response);
     }
@@ -69,6 +77,7 @@ public class InteractionController implements InteractionApi
     @GetMapping("/{interactionId}/result")
     public ResponseEntity<InteractionContent> getInteractionResult(@RequestParam("userId") String userId, @PathVariable("interactionId") UUID interactionId)
     {
+        authCheck(userId);
         InteractionContent response = interactionService.getInteractionResult(userId, interactionId);
         return ResponseEntity.ok(response);
     }
@@ -77,7 +86,18 @@ public class InteractionController implements InteractionApi
     @DeleteMapping("/{interactionId}")
     public ResponseEntity<Void> deleteInteraction(@RequestParam("userId") String userId, @PathVariable("interactionId") UUID interactionId)
     {
+        authCheck(userId);
         interactionService.deleteInteraction(userId, interactionId);
         return ResponseEntity.noContent().build();
+    }
+
+    private void authCheck(String userId)
+    {
+        String loggedInUser = authenticationFacade.getAuthenticatedUser();
+
+        if (!loggedInUser.equals(userId))
+        {
+            throw new UnauthorizedException("Unauthorized to perform this operation on this user");
+        }
     }
 }
