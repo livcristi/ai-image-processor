@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cloud-storage-service
+  namespace: ai-image-processor
 spec:
   replicas: 1
   selector:
@@ -14,8 +15,7 @@ spec:
     spec:
       containers:
         - name: cloud-storage-service
-          image: cloud-storage-service:latest
-          imagePullPolicy: Never
+          image: aiimageprocacr.azurecr.io/cloud-storage-service:latest
           ports:
             - containerPort: 2660
           envFrom:
@@ -28,6 +28,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: cloud-storage-service
+  namespace: ai-image-processor
 spec:
   selector:
     app: cloud-storage-service

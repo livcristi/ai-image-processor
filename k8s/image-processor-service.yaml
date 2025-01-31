@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: image-processor-service
+  namespace: ai-image-processor
 spec:
   replicas: 1
   selector:
@@ -14,8 +15,7 @@ spec:
     spec:
       containers:
         - name: image-processor-service
-          image: image-processor-service:latest
-          imagePullPolicy: Never
+          image: aiimageprocacr.azurecr.io/image-processor-service:latest
           ports:
             - containerPort: 7540
           envFrom:
@@ -28,6 +28,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: image-processor-service
+  namespace: ai-image-processor
 spec:
   selector:
     app: image-processor-service
