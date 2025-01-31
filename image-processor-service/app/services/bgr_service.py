@@ -4,7 +4,7 @@ from typing import Tuple
 
 from rembg import remove
 
-from app.services.base_service import BaseTaskService
+from services.base_service import BaseTaskService
 
 
 class BGRService(BaseTaskService):

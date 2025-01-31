@@ -1,9 +1,9 @@
 import logging
 from typing import Dict
 
-from app.models.models import OperationType, TaskInfo
-from app.services.base_service import BaseTaskService
-from app.services.css_client import CSSClient
+from models.models import OperationType, TaskInfo
+from services.base_service import BaseTaskService
+from services.css_client import CSSClient
 
 
 class TaskProcessor:

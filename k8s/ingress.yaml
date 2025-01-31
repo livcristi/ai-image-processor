@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ai-image-processor-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: ai-image-processor.local
+      http:
+        paths:
+          - path: /handler
+            pathType: Prefix
+            backend:
+              service:
+                name: image-handler-service
+                port:
+                  number: 2740

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: image-handler-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: image-handler-service
+  template:
+    metadata:
+      labels:
+        app: image-handler-service
+    spec:
+      containers:
+        - name: image-handler-service
+          image: image-handler-service:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 2740
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: app-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: image-handler-service
+spec:
+  selector:
+    app: image-handler-service
+  ports:
+    - protocol: TCP
+      port: 2740
+      targetPort: 2740
+  type: ClusterIP

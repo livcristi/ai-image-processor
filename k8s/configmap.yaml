@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  CSS_SQL_DATASOURCE: "jdbc:mysql://ai-img-proc-db.mysql.database.azure.com:3306/cloudstoragedb"
+  RABBITMQ_HOST: "ostrich-01.lmq.cloudamqp.com"
+  RABBITMQ_PORT: "5672"
+  CLOUD_STORAGE_SERVICE: "http://cloud-storage-service:2660"
+  CSS_BASE_URL: "http://cloud-storage-service:2660/api"
+  PYTHONUNBUFFERED: "1"
+  AUTH_SQL_DATASOURCE: "jdbc:mysql://ai-img-proc-db.mysql.database.azure.com:3306/authdb"
+  RABBITMQ_QUEUE: "image-processor-task-queue"

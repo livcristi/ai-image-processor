@@ -4,7 +4,7 @@ from io import BytesIO
 
 import requests
 
-from app.models.models import TaskInfo, InteractionRequest
+from models.models import TaskInfo, InteractionRequest
 
 
 class CSSClient:

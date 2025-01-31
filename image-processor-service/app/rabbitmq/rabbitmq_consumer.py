@@ -3,9 +3,9 @@ import logging
 
 import pika
 
-from app.config.connection_details import RabbitMqConnectionDetails
-from app.models.models import TaskInfo
-from app.processor.task_processor import TaskProcessor
+from config.connection_details import RabbitMqConnectionDetails
+from models.models import TaskInfo
+from processor.task_processor import TaskProcessor
 
 
 def rabbitmq_consumer(

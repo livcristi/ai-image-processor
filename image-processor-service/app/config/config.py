@@ -2,7 +2,7 @@ import os
 
 from pydantic_settings import BaseSettings
 
-from app.config.connection_details import RabbitMqConnectionDetails
+from config.connection_details import RabbitMqConnectionDetails
 
 
 class Config(BaseSettings):

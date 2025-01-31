@@ -3,12 +3,12 @@ import logging
 import uvicorn
 from fastapi import FastAPI, HTTPException
 
-from app.config.config import Config
-from app.models.models import OperationType, TaskInfo
-from app.processor.task_processor import TaskProcessor
-from app.services.bgr_service import BGRService
-from app.services.css_client import CSSClient
-from app.services.ocr_service import OCRService
+from config.config import Config
+from models.models import OperationType, TaskInfo
+from processor.task_processor import TaskProcessor
+from services.bgr_service import BGRService
+from services.css_client import CSSClient
+from services.ocr_service import OCRService
 
 logging.basicConfig(level=logging.INFO)
 

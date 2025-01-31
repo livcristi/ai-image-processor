@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-storage-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloud-storage-service
+  template:
+    metadata:
+      labels:
+        app: cloud-storage-service
+    spec:
+      containers:
+        - name: cloud-storage-service
+          image: cloud-storage-service:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 2660
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: app-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloud-storage-service
+spec:
+  selector:
+    app: cloud-storage-service
+  ports:
+    - protocol: TCP
+      port: 2660
+      targetPort: 2660
+  type: ClusterIP

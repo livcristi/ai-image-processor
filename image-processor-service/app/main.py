@@ -1,12 +1,12 @@
 import logging
 
-from app.config.config import Config
-from app.models.models import OperationType
-from app.processor.task_processor import TaskProcessor
-from app.rabbitmq.rabbitmq_consumer import rabbitmq_consumer
-from app.services.bgr_service import BGRService
-from app.services.css_client import CSSClient
-from app.services.ocr_service import OCRService
+from config.config import Config
+from models.models import OperationType
+from processor.task_processor import TaskProcessor
+from rabbitmq.rabbitmq_consumer import rabbitmq_consumer
+from services.bgr_service import BGRService
+from services.css_client import CSSClient
+from services.ocr_service import OCRService
 
 logging.basicConfig(level=logging.INFO)
 

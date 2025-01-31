@@ -6,7 +6,7 @@ import numpy as np
 from PIL import Image
 import easyocr
 
-from app.services.base_service import BaseTaskService
+from services.base_service import BaseTaskService
 
 
 class OCRService(BaseTaskService):
