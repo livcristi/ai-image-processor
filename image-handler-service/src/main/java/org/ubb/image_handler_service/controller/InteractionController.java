@@ -22,6 +22,7 @@ import org.ubb.image_handler_service.service.security.AuthenticationFacade;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/interactions")
 public class InteractionController implements InteractionApi
 {

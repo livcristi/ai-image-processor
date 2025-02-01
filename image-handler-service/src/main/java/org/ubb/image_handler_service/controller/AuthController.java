@@ -1,10 +1,7 @@
 package org.ubb.image_handler_service.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.ubb.image_handler_service.dto.auth.AuthResponse;
 import org.ubb.image_handler_service.dto.auth.LoginRequest;
 import org.ubb.image_handler_service.dto.auth.RegisterRequest;
@@ -13,6 +10,7 @@ import org.ubb.image_handler_service.service.security.JwtService;
 import org.ubb.image_handler_service.service.security.UserService;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/auth")
 public class AuthController
 {
