@@ -64,7 +64,8 @@ public class Converters
         return interactionContent;
     }
 
-    public static TaskInfo toTaskInfo(InteractionResponse interactionResponse, ObjectInfoResponse objectInfoResponse) {
+    public static TaskInfo toTaskInfo(InteractionResponse interactionResponse, ObjectInfoResponse objectInfoResponse)
+    {
         TaskInfo taskInfo = new TaskInfo();
         taskInfo.setTaskId(UUID.randomUUID());
         taskInfo.setUserId(interactionResponse.getUserId());

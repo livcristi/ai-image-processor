@@ -23,7 +23,7 @@ import static org.ubb.image_handler_service.utils.Converters.*;
 public class InteractionServiceImpl implements InteractionService
 {
     private static final Logger LOG = LoggerFactory.getLogger(InteractionServiceImpl.class);
-    public static final String INPUT_TAG_KEY = "isInput";
+    private static final String INPUT_TAG_KEY = "isInput";
 
     private final CloudStorageClient cloudStorageClient;
     private final RabbitMqProducer rabbitMqProducer;
