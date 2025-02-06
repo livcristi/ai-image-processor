@@ -42,7 +42,7 @@ const Login = ({ toggleView, currentView }) => {
         type="text"
         name="loginEmail"
         value={username}
-        placeholder="Email"
+        placeholder="Username"
         className="w-full p-3 border rounded-md mb-4"
         onChange={(e) => setUsername(e.target.value)}
       />
